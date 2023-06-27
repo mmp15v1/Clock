@@ -10,6 +10,30 @@ using namespace std;
 void display(int h,int m,int s){ // ASCI later
         cout <<h<<":"<<m<<":"<<s<< endl;
 }
+int dwacztery(int value) {
+  value = value % 24;  
+  if (value < 0) {
+    value += 24;  
+  }
+  
+  return value;
+}
+void convert(int hour){
+        cout << "GMT: "<<dwacztery(hour)<<":00"<<endl;
+        cout << "UTC: "<<dwacztery(hour)<<":00"<<endl;
+        cout << "CET: "<<dwacztery(hour +1)<<":00"<<endl;
+        cout << "EET: "<<dwacztery(hour +2)<<":00"<<endl;
+        cout << "JST: "<<dwacztery(hour+9)<<":00"<<endl;
+        cout << "AEST: "<<dwacztery(hour+10)<<":00"<<endl;
+        cout << "NZST: "<<dwacztery(hour+12)<<":00"<<endl;
+
+        cout << "AST: "<<dwacztery(hour-4)<<":00"<<endl;
+        cout <<"EST: "<<dwacztery(hour-5)<<":00"<<endl;
+        cout <<"PST: "<<dwacztery(hour-8)<<":00"<<endl;
+        
+
+
+}
 
 void alarm(int agh,int agm,int ags){
 
@@ -91,7 +115,7 @@ void displayloop(){
 
 }
 int main(int argc,char* argv[]){
-        int h,m,s,ag;
+        int h,m,s,ag,hour;
         string ar;
         time_t now = time(0);
         tm *ltm = localtime(&now);
@@ -101,6 +125,13 @@ int main(int argc,char* argv[]){
         if(argc>1){
                 ar=argv[1];
                 switch(ar[1]){
+                        case 'h':
+                                cout << "s = stoper "<<endl;
+                                cout << "t = timer (int duration)"<<endl;
+                                cout << "a = alarm (int hour int minute int second)"<<endl;
+                                cout << "n = time now"<<endl;
+                                cout << "c = convert (int hour)"<<endl; 
+                                break;
                         case 'n':
                                 display(h,m,s);
                                 break;
@@ -111,11 +142,16 @@ int main(int argc,char* argv[]){
                                 ag =stoi(argv[2]);
                                 timer(ag,h,m,s);
                                 break;
+                        case 'c':
+                                hour =stoi(argv[2]);
+                                convert(hour);
+                                break;
                         case 'a':
                                 int agh =stoi(argv[2]);
                                 int agm =stoi(argv[3]);
                                 int ags =stoi(argv[4]);
                                 alarm(agh,agm,ags);
+                                break;
 
                 }
         }else{
