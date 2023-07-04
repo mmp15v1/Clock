@@ -1,15 +1,30 @@
 #include<iostream>
 #include<ctime>
 #include<cmath>
+#include <ostream>
 #include<string>
 #include <chrono>
 #include <thread>
 
 using namespace std;
-
-void display(int h,int m,int s){ // ASCI later
-        cout <<h<<":"<<m<<":"<<s<< endl;
+void cdisplay(int h,int m,int s,int nh,int nm ,int ns,int agh, int agm ,int ags){ // ASCI later
+        string fdisp= to_string(h)+ ":" + to_string(m) + ":"+to_string(s); 
+        cout << fdisp<<endl;
+        cout <<nh<<":"<<nm<<":"<<ns<<endl;
+        cout << "  |"<<endl<<"   -----> ";
+        cout << agh<<":"<<agm<<":"<<ags;
+        cout <<"\33[3A";
+        cout.flush();
+        cout <<"\33[17D";
+        cout << "\033[K";
 }
+void display(int h,int m,int s){ // ASCI later
+        string fdisp= to_string(h)+ ":" + to_string(m) + ":"+to_string(s); 
+        cout  <<"   "<<fdisp<< "\r";
+        cout.flush();
+        cout << "\033[K";
+}
+
 int dwacztery(int value) {
   value = value % 24;  
   if (value < 0) {
@@ -48,23 +63,15 @@ void alarm(int agh,int agm,int ags){
                 ns=ltm->tm_sec;
                 cur = (nh*3600) + (nm*60) + ns;
                 disp = target - cur;
-                display(disp/3600,(disp%3600)/60,disp%60);
-                display(nh,nm,ns);
-                cout <<"   |"<<endl<<"   -----> ";
-                display(agh,agm,ags);
+                cdisplay(disp/3600,(disp%3600)/60,disp%60,nh,nm,ns,agh,agm,ags); //left
                 this_thread::sleep_for(chrono::milliseconds(500));
-                system("clear");
+
+                cout << "\033[K";
+                //system("clear");
 
         }
-         cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1620));
-        cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1520));
-        cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1520));
-        cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1520));
-        cout << '\a'<< flush;
+        cout <<endl<<endl<<endl;
+        cout << "END"<<endl;
 }
 
 void stoper(int h,int m,int s){
@@ -81,7 +88,7 @@ int64_t start = (h*3600) + (m*60) +s;
                 disp = cur - start;
                 display(disp/3600,(disp%3600)/60,disp%60);
                 this_thread::sleep_for(chrono::milliseconds(100));
-                system("clear");
+                //system("clear");
         }
 }
 
@@ -99,24 +106,16 @@ void timer(int ag,int h,int m,int s){
                 disp = target - cur;
                 display(disp/3600,(disp%3600)/60,disp%60);
                 this_thread::sleep_for(chrono::milliseconds(500));
-                system("clear");
+                //system("clear");
         }
-        cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1620));
-        cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1520));
-        cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1520));
-        cout << '\a'<< flush;
-        this_thread::sleep_for(chrono::milliseconds(1520));
-        cout << '\a'<< flush;
+        cout << "END"<<endl;
 }
 void displayloop(){
 
 }
 int main(int argc,char* argv[]){
         int h,m,s,ag,hour;
-        string ar;
+        string ar,fdisp;
         time_t now = time(0);
         tm *ltm = localtime(&now);
         h= ltm->tm_hour;
@@ -133,7 +132,9 @@ int main(int argc,char* argv[]){
                                 cout << "c = convert (int hour)"<<endl; 
                                 break;
                         case 'n':
-                                display(h,m,s);
+                                //display(h,m,s);
+                                fdisp = to_string(h)+ ":" + to_string(m) + ":"+to_string(s);
+                                cout  <<"   "<<fdisp<<endl;
                                 break;
                         case 's':
                                 stoper(h,m,s);
