@@ -75,17 +75,23 @@ void alarm(int agh,int agm,int ags){
 }
 
 void stoper(int h,int m,int s){
-int64_t start = (h*3600) + (m*60) +s;
-        int nh,nm,ns,cur=0,disp;
+        int nh,nm,ns,cur=0,disp=0,ra;
+        int64_t todisp=0;
         time_t now;
         while(true){
+                ra = cur;///
                 now = time(0);
                 tm *ltm =localtime(&now);
                 nh=ltm->tm_hour;
                 nm=ltm->tm_min;
                 ns=ltm->tm_sec;
                 cur = (nh*3600) + (nm*60) + ns;
-                disp = cur - start;
+
+                if(ra!=cur){///
+                        todisp++;///
+                }///
+                disp = todisp;
+
                 display(disp/3600,(disp%3600)/60,disp%60);
                 this_thread::sleep_for(chrono::milliseconds(100));
                 //system("clear");
