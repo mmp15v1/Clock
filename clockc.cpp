@@ -138,6 +138,7 @@ void Displayloop::displayloop(){
     int h,m,s;
     time_t now;
     while(true){
+        this_thread::sleep_for(chrono::milliseconds(100));
         now = time(0);
         tm *ltm = localtime(&now);
         h= ltm->tm_hour;
